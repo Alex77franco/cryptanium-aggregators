@@ -70,7 +70,7 @@ async def sanitize_transactions(new_tx_signatures):
                 if "parsed" in txn_detail:
                     info = txn_detail["parsed"]["info"]
                     print(info)
-                    with open("data.json", "a") as f:
+                    with open("solana.json", "a") as f:
                         json.dump(info, f)
                     txn_type = txn_detail["parsed"]["type"]
                     if txn_type == "transferChecked":
