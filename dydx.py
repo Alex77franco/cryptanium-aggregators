@@ -38,5 +38,6 @@ if __name__ == "__main__":
   balance_data = get_dydx_balance_rpc(wallet_address, cosmos_rpc_url)
   if balance_data:
      # Write transactions to JSON file
-    with open("dydx.json", "w") as f:
+    filename = f"{wallet_address}.json"
+    with open(filename, "w") as f:
         json.dump(balance_data, f, indent=4)

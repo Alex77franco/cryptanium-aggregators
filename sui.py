@@ -37,5 +37,6 @@ if __name__ == "__main__":
     wallet_address = "0x357a12335528ee125422430624e0251f18d3ee0f55d5911e56b3da1c3eeb06fc"
     balances = get_balances(wallet_address)
     # Write transactions to JSON file
-    with open('sui.json', 'w') as json_file:
+    filename = f"{wallet_address}.json"
+    with open(filename, 'w') as json_file:
         json.dump(balances, json_file, indent=4)

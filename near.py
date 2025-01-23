@@ -48,7 +48,8 @@ async def main():
     transactions = await fetch_transactions(api_url)
 
     # Write transactions to JSON file
-    with open('near.json', 'w') as json_file:
+    filename = f"{wallet_address}.json"
+    with open(filename, 'w') as json_file:
         json.dump(transactions, json_file, indent=4)
 
 if __name__ == "__main__":

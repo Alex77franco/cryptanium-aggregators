@@ -82,5 +82,6 @@ if __name__ == "__main__":
   transactions = get_mina_transactions_rest(public_key)
 
   # Write transactions to JSON file
-  with open("mina.json", "w") as f:
+  filename = f"{public_key}.json"
+  with open(filename, "w") as f:
     json.dump(transactions, f, indent=4)
