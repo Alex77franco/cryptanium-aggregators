@@ -8,6 +8,7 @@
 | SUI | https://sui-rpc.publicnode.com | suix_getAllBalances | https://api.dexscreener.com/tokens/v1/sui/
 | INJ  | https://lcd.injective.network | /cosmos/bank/v1beta1/balances/ | https://api.dexscreener.com/tokens/v1/injective/  |
 | Atom  | https://docs-demo.cosmos-mainnet.quiknode.pro | /cosmos/staking/v1beta1/delegations/ | https://api.dexscreener.com/tokens/v1/bsc/0x0Eb3a705fc54725037CC9e008bDede697f62F335  |
+| Near  | - | - | https://api.pikespeak.ai/account/wealth/  |
 
 ## Introduction
 
