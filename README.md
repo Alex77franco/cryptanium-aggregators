@@ -6,7 +6,7 @@
 | :------------- | :------------------------------------------ | :-------------------------------------- | :----------------------------------------------------------------- |
 | Solana  | https://api.mainnet-beta.solana.com | getBalance | https://api.dexscreener.com/tokens/v1/solana/                 |
 | SUI | https://sui-rpc.publicnode.com | suix_getAllBalances | https://api.dexscreener.com/tokens/v1/sui/
-| INJ  | https://lcd.injective.network | /cosmos/bank/v1beta1/balances/ | https://api.dexscreener.com/tokens/v1/injective/  |
+| INJ  | https://injective-rest.publicnode.com | /cosmos/bank/v1beta1/balances/ | https://api.dexscreener.com/latest/dex/tokens/inj  |
 | Atom  | https://docs-demo.cosmos-mainnet.quiknode.pro | /cosmos/staking/v1beta1/delegations/ | https://api.dexscreener.com/tokens/v1/bsc/0x0Eb3a705fc54725037CC9e008bDede697f62F335  |
 | Near  | - | - | https://api.pikespeak.ai/account/wealth/  |
 | TAO  | https://api.taostats.io/api/account/latest/v1 | - | https://api.taostats.io/api/price/latest/v1?asset=tao  |
