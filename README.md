@@ -8,7 +8,7 @@
 | SUI | https://sui-rpc.publicnode.com | suix_getAllBalances | https://api.dexscreener.com/tokens/v1/sui/
 | INJ  | https://injective-rest.publicnode.com | /cosmos/bank/v1beta1/balances/ | https://api.dexscreener.com/latest/dex/tokens/inj  |
 | Atom  | https://docs-demo.cosmos-mainnet.quiknode.pro | /cosmos/staking/v1beta1/delegations/ | https://api.dexscreener.com/tokens/v1/bsc/0x0Eb3a705fc54725037CC9e008bDede697f62F335  |
-| Near  | - | - | https://api.pikespeak.ai/account/wealth/  |
+| Near  | https://rpc.mainnet.near.org | - | https://api.pikespeak.ai/account/wealth/  |
 | TAO  | https://api.taostats.io/api/account/latest/v1 | - | https://api.taostats.io/api/price/latest/v1?asset=tao  |
 | Mina  | https://api.minaexplorer.com | /accounts/ | https://api.coingecko.com/api/v3/simple/price?ids=mina-protocol&vs_currencies=usd  |
 | DYDX  | https://dydx-rest.publicnode.com | /cosmos/bank/v1beta1/balances/ | https://api.dexscreener.com/latest/dex/tokens/0x92D6C1e31e14520e676a687F0a93788B716BEff5 |
