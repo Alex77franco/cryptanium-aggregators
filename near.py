@@ -1,5 +1,7 @@
-import os
 import requests
+import json
+import base64
+import os
 import csv
 import threading
 from datetime import datetime
@@ -8,8 +10,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+NEAR_RPC_URL = "https://rpc.mainnet.near.org"
+
+contract_address = "ledgerbyfigment.poolv1.near"
+method_name = "get_account"
+
+account_id = "cfdf371346821425cffe9ddd42cd0645c44d8837d614fc884a712a8662e50cfa"
+
 PIKESPEAK_API_URL = "https://api.pikespeak.ai/account/wealth/"
-ACCOUNT_ID = "cfdf371346821425cffe9ddd42cd0645c44d8837d614fc884a712a8662e50cfa"
 REPORTS_FOLDER = "reports"
 API_KEY = os.getenv("PIKESPEAK_API_KEY")
 
@@ -31,6 +39,37 @@ def safe_float(value, default=0.0):
         return float(value) if value is not None else default
     except (ValueError, TypeError):
         return default
+
+def get_staked_near_balance():
+    """Fetch the staked NEAR balance using the NEAR RPC."""
+    data = {
+        "jsonrpc": "2.0",
+        "id": "1",
+        "method": "query",
+        "params": {
+            "request_type": "call_function",
+            "finality": "final",
+            "account_id": contract_address,
+            "method_name": method_name,
+            "args_base64": base64.b64encode(json.dumps({"account_id": account_id}).encode("utf-8")).decode("utf-8")
+        }
+    }
+
+    response = requests.post(NEAR_RPC_URL, json=data)
+
+    if response.status_code == 200:
+        result = response.json()
+        if "result" in result and "result" in result["result"]:
+            decoded_result = json.loads(bytes(result["result"]["result"]).decode("utf-8"))
+            staked_balance = int(decoded_result.get("staked_balance", "0")) / 1e24
+            return staked_balance
+        else:
+            print("Unexpected response format:", result)
+            return 0.0
+    else:
+        print(f"Failed to fetch staked balance. Status code: {response.status_code}")
+        print(response.text)
+        return 0.0
 
 def get_account_balances(account_id):
     """Fetch all token balances for a given NEAR account using the Pikespeak API."""
@@ -70,11 +109,9 @@ def get_account_balances(account_id):
         print(f"Error fetching balances: {e}")
         return []
 
-def export_to_csv(data, filename):
+def export_to_csv(data, filename, staked_near_balance, near_price):
     """Export the results to a CSV file."""
     try:
-        data = sorted(data, key=lambda x: float(x['Total Value (USD)']), reverse=True)
-
         os.makedirs(REPORTS_FOLDER, exist_ok=True)
 
         file_path = os.path.join(REPORTS_FOLDER, filename)
@@ -90,6 +127,16 @@ def export_to_csv(data, filename):
                 total_value_sum += float(row['Total Value (USD)'])
                 writer.writerow(row)
 
+            staked_total_value = staked_near_balance * near_price
+            writer.writerow({
+                "Symbol": "Stacked NEAR",
+                "Address": contract_address,
+                "Balance": f"{staked_near_balance:.6f}",
+                "Price (USD)": f"{near_price:.6f}",
+                "Total Value (USD)": f"{staked_total_value:.6f}"
+            })
+
+            total_value_sum += staked_total_value
             writer.writerow({})
             writer.writerow({
                 "Symbol": "TOTAL",
@@ -107,19 +154,20 @@ def main():
     global loading
 
     print("Running...")
-    
     loading_thread = threading.Thread(target=show_loading, args=("Fetching data",))
     loading_thread.start()
 
-    token_data = get_account_balances(ACCOUNT_ID)
+    token_data = get_account_balances(account_id)
+    staked_near_balance = get_staked_near_balance()
 
     loading = False
     loading_thread.join()
 
     if token_data:
+        near_price = next((float(token['Price (USD)']) for token in token_data if token['Symbol'] == 'NEAR'), 0.0)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{ACCOUNT_ID}_NEAR_{timestamp}.csv"
-        export_to_csv(token_data, filename)
+        filename = f"{account_id}_NEAR_{timestamp}.csv"
+        export_to_csv(token_data, filename, staked_near_balance, near_price)
 
     print("Done!")
 
